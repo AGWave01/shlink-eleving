@@ -1,0 +1,76 @@
+shlink:
+  replicaCount: 2
+  image:
+    tag: "4.4.0"
+  env:
+    - name: DEFAULT_DOMAIN
+      value: short.example.com
+    - name: IS_HTTPS_ENABLED
+      value: "true"
+    - name: INITIAL_API_KEY
+      value: "580d0b42-4dea-419a-96bf-6c876b901451"
+    - name: SHELL_VERBOSITY
+      value: "3"
+
+  postgresql:
+    enabled: true
+    port: 5432
+    auth:
+      database: shlink
+      username: shlink
+      existingSecret: shlink-stack-postgresql
+      existingSecretKey: password
+
+  ingress:
+    enabled: true
+    className: nginx
+    hosts:
+      - host: shlink.eleving.com
+        paths:
+          - path: /
+            pathType: Prefix
+    tls: []
+
+  service:
+    type: ClusterIP
+    port: 80
+
+shlink-web:
+  replicaCount: 1
+
+  image:
+    repository: shlinkio/shlink-web-client
+    pullPolicy: IfNotPresent
+    tag: "4.4.0"
+
+  configuration:
+    - name: "Main"
+      url: "http://shlink.shlink.svc.cluster.local"
+      apiKey: "580d0b42-4dea-419a-96bf-6c876b901451"
+
+  extraEnv:
+    - name: SHLINK_SERVER_API_KEY
+      value: "580d0b42-4dea-419a-96bf-6c876b901451"
+    - name: SHLINK_SERVER_URL
+      value: "http://shlink.shlink.svc.cluster.local"
+
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/auth-type: basic
+      nginx.ingress.kubernetes.io/auth-secret: shlink-web-auth
+      nginx.ingress.kubernetes.io/auth-realm: "Authentication Required"
+      nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8,192.168.0.0/16,127.0.0.1,10.244.0.0/16"
+    hosts:
+      - host: shlink-web.eleving.com
+        paths:
+          - path: /
+            pathType: Prefix
+
+  service:
+    type: ClusterIP
+    port: 80
+
+  networkPolicy:
+    enabled: false

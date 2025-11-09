@@ -1,0 +1,23 @@
+Shlink stack installed.
+
+Shlink API:
+  Service: {{ include "shlink.fullname" . }} (port {{ .Values.shlink.service.port }})
+  {{- if .Values.shlink.ingress.enabled }}
+  Ingress: http{{ if .Values.shlink.ingress.tls }}s{{ end }}://{{ (index .Values.shlink.ingress.hosts 0).host }}
+  {{- else }}
+  Ingress: Not enabled
+  {{- end }}
+
+Shlink Web UI:
+  Service: {{ include "shlink-web.fullname" . }} (port {{ (index .Values "shlink-web").service.port }})
+  {{- if (index .Values "shlink-web").ingress.enabled }}
+  Ingress: http{{ if (index .Values "shlink-web").ingress.tls }}s{{ end }}://{{ (index (index .Values "shlink-web").ingress.hosts 0).host }}
+  {{- else }}
+  Ingress: Not enabled
+  {{- end }}
+
+
+
+PostgreSQL:
+  Username: {{ .Values.shlink.postgresql.auth.username | default "N/A" }}
+  Database: {{ .Values.shlink.postgresql.auth.database | default "N/A" }}

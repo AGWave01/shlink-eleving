@@ -1,0 +1,14 @@
+apiVersion: v2
+name: shlink-stack
+description: Shlink stack with backend and web UI
+type: application
+version: 0.1.0
+appVersion: "4.4.0"
+
+dependencies:
+  - name: shlink
+    version: "4.4.0"
+    repository: "file://charts/shlink"
+  - name: shlink-web
+    version: "1.4.1"
+    repository: "file://charts/shlink-web"

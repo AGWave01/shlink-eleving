@@ -1,0 +1,9 @@
+dependencies:
+- name: shlink
+  repository: file://charts/shlink
+  version: 4.4.0
+- name: shlink-web
+  repository: file://charts/shlink-web
+  version: 1.4.1
+digest: sha256:f566a4402549a416b3701f15d0460b35cdc58568059ff3547139b3aa578ed080
+generated: "2025-11-04T11:57:43.946700491+02:00"

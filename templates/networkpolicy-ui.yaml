@@ -1,0 +1,21 @@
+{{- $uiValues := (index .Values "shlinkweb") }}
+{{- if and (hasKey $uiValues "networkPolicy") (hasKey $uiValues.networkPolicy "enabled") $uiValues.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "shlinkweb.fullname" . }}-ingress-np
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: shlinkweb
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+      {{- range $uiValues.networkPolicy.allowedCidrs }}
+      - ipBlock:
+          cidr: {{ . | quote }}
+      {{- end }}
+{{- end }}
+
