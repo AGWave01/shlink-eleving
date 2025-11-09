@@ -10,7 +10,7 @@
 - create db password secret - "kubectl create secret generic shlink-stack-postgresql --from-literal=password="password1234" --from-literal=postgres-password="password1234" -n shlink"
 - install chart - "helm upgrade --install shlink-stack . -n shlink -f values.yaml"
 
-### Upgrade plan to v4.6
+## Upgrade plan to v4.6
 
 To make an upgrade, should be updated the image tag in values.yaml file from 4.4.0 to 4.6.0 for both backend and web, then should be run the "helm upgrade --install" command. After the upgrade completes, should be verified that all pods are running and using version 4.6.0
 
